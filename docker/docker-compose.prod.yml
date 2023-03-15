@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  backend:
+    build: 
+      context: ../
+      dockerfile: ./docker/backend/Dockerfile.prod
+    container_name: menu-backend
+    ports:
+      - "3001:3001"
+
+  frontend:
+    build: 
+      context: ../
+      dockerfile: ./docker/frontend/Dockerfile.prod
+    container_name: menu-frontend
+    command: npm build
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
