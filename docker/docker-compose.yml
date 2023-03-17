@@ -5,17 +5,19 @@ services:
     build: 
       context: ../
       dockerfile: ./docker/frontend/Dockerfile.dev
-    container_name: menu-frontend
+    container_name: frontend
     command: npm start
     restart: unless-stopped
     stdin_open: true
     tty: true
+    environment:
+       - CHOKIDAR_USEPOLLING=true
     volumes:
       - ../src/frontend/src:/var/www/menu/src
 
   nginx:
     image: nginx:stable-alpine
-    container_name: menu-nginx
+    container_name: nginx
     ports:
       - "80:80"
       - "443:443"
@@ -27,7 +29,7 @@ services:
       - frontend
 
   backend:
-    container_name: menu-backend
+    container_name: backend
     build:
       context: ../
       dockerfile: ./docker/backend/Dockerfile.dev
@@ -47,7 +49,7 @@ services:
 
   postgres:
     image: postgres:14.2-alpine
-    container_name: menu-postrges
+    container_name: postrges
     environment:
         POSTGRES_USER: ${POSTGRES_USER}
         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
